@@ -21,13 +21,14 @@ const Recipe = new Schema({
 
 const User = new Schema({
   username: {type:String, required:true, unique:true},
-//   password: {type:String, required:true},
+  name: {type:String, required:true},
+
 })
 
 mongoose.connect('mongodb://localhost/brewmate',
   { useNewUrlParser: true, useUnifiedTopology: true })
 
-User.plugin(passportLocalMongoose)
+User.plugin(passportLocalMongoose, {usernameField: 'email'})
 const Users = mongoose.model('user', User)
 
 module.exports = Users

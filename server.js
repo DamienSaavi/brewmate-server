@@ -1,6 +1,6 @@
 const express = require('express')
-const passport = require('passport')
-const Users = require('./user.js')
+const passport = require('./config')
+const Users = require('./user')
 const bodyParser = require('body-parser')
 const expressSession = require('express-session')({
   secret: process.env.sessionSecret || 'secret',
@@ -16,9 +16,6 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(expressSession)
 app.use(passport.initialize())
 app.use(passport.session())
-passport.use(Users.createStrategy())
-passport.serializeUser(Users.serializeUser())
-passport.deserializeUser(Users.deserializeUser())
 
 app.use(router)
 
