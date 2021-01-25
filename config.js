@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const Users = require('./user.js')
+const passport = require('passport')
+const Users = require('./user')
 
 mongoose.connect('mongodb://localhost/brewmate',
   { useNewUrlParser: true, useUnifiedTopology: true })
