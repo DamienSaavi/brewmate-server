@@ -1,14 +1,21 @@
 const express = require('express')
+const session = require('express-session')
+const mongoose = require('mongoose')
+const MongoStore = require('connect-mongo')(session);
 const passport = require('./config')
-const Users = require('./user')
 const bodyParser = require('body-parser')
-const expressSession = require('express-session')({
-  secret: process.env.sessionSecret || 'secret',
-  resave: false,
-  saveUninitialized: false
-})
 const router = require('./routes.js')
 const app = express()
+
+mongoose.connect('mongodb://localhost/brewmate',
+  { useNewUrlParser: true, useUnifiedTopology: true })
+
+const expressSession = session({
+  secret: process.env.sessionSecret || 'secret',
+  resave: false,
+  saveUninitialized: false,
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+})
 
 app.use(express.static(__dirname))
 app.use(bodyParser.json())
