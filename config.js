@@ -1,10 +1,10 @@
-const mongoose = require('mongoose')
 const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
 const Users = require('./user')
 
-mongoose.connect('mongodb://localhost/brewmate',
-  { useNewUrlParser: true, useUnifiedTopology: true })
-
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+  },Users.authenticate()));
 passport.use(Users.createStrategy())
 passport.serializeUser(Users.serializeUser())
 passport.deserializeUser(Users.deserializeUser())
