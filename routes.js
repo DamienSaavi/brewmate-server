@@ -5,44 +5,43 @@ const Users = require('./user')
 const passport = require('./config')
 
 router.post('/login', (req, res, next) => {
-    passport.authenticate('local',
+  passport.authenticate('local',
     (err, user, info) => {
       if (err)
-        return next(err)
-  
+        res.status(500).send(err)
+
       if (!user)
-        return res.redirect('/login?info=' + info)
-  
-      req.logIn(user, (err)=> {
+        res.status(403).send(info)
+
+      req.logIn(user, (err) => {
         if (err)
-          return next(err)
+          res.status(500).send(err)
         else
-            console.log(user)
-        return res.redirect('/')
+          res.status(200).redirect('/user')
       })
-  
+
     })(req, res, next)
 })
 
 router.post('/register', (req, res, next) => {
-    Users.register(new Users({username: req.body.username}), req.body.password, (err, user) => {
-       
-        if (err)
-            console.log(err)
-        else
-            console.log(user)
-    })
-    next()
+  console.log(req.body)
+  Users.register(new Users({ email: req.body.email, name: req.body.name }), req.body.password, (err, user) => {
+    if (err)
+      console.log(err)
+    else
+      res.status(200).redirect('/user')
+    return
+  })
 })
-  
+
 router.get('/user',
-    connectEnsureLogin.ensureLoggedIn('/'),
-    (req, res) => res.send({user: req.user})
+  connectEnsureLogin.ensureLoggedIn('/'),
+  (req, res) => res.send({ user: req.user })
 )
 
 router.get('/', (req, res, next) => {
-    res.send('hello')
-    next()
+  res.send(`you're not logged in :<`)
+  next()
 })
 
 module.exports = router
