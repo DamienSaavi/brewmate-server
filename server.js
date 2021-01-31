@@ -7,11 +7,15 @@ const bodyParser = require('body-parser')
 const router = require('./routes.js')
 const app = express()
 
-mongoose.connect('mongodb://localhost/brewmate',
-  { useNewUrlParser: true, useUnifiedTopology: true })
+const dotenv = require('dotenv')
+dotenv.config()
+
+
+mongoose.connect(process.env.DB_URI,
+  { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex:true })
 
 const expressSession = session({
-  secret: process.env.sessionSecret || 'secret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({ mongooseConnection: mongoose.connection })
@@ -26,5 +30,5 @@ app.use(passport.session())
 
 app.use(router)
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT
 app.listen(port, () => console.log('App listening on port ' + port))
