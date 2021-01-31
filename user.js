@@ -5,11 +5,8 @@ const Schema = mongoose.Schema
 const Step = new Schema({
   instruction: String,
   ingredients: [Schema.Types.Mixed],
-  // [name: String, amount: Number, unit: String]
-  timer: Schema.Types.Mixed
-  // name:String,
-  // duration:{minutes:Number, seconds:Number},
-  // synced:Boolean}
+  timer: Schema.Types.Mixed,
+  log: [Schema.Types.Mixed]
 })
 
 const Recipe = new Schema({
