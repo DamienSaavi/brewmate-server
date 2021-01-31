@@ -39,6 +39,16 @@ router.get('/user',
   (req, res) => res.send({ user: req.user })
 )
 
+router.put('/update-recipes',
+  connectEnsureLogin.ensureLoggedIn('/'),
+  async (req, res) => {
+    const target = await Users.findById(req.user._id).exec()
+    target.recipes = req.body.recipes
+    await target.save()
+    res.status(200).send()
+  }
+)
+
 router.get('/', (req, res, next) => {
   res.send(`you're not logged in :<`)
   next()
