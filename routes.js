@@ -26,10 +26,11 @@ router.post('/login', (req, res, next) => {
 router.post('/register', (req, res, next) => {
   console.log(req.body)
   Users.register(new Users({ email: req.body.email, name: req.body.name }), req.body.password, (err, user) => {
-    if (err)
+    if (err){
       console.log(err)
+      res.status(500).send(err)}
     else
-      res.status(200).redirect('/user')
+      res.status(200).send(user)
     return
   })
 })
